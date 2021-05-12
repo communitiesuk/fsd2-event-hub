@@ -96,13 +96,13 @@ Result:
 }
 ```
 
-## Running in production
+## ENVIRONMENT variables
 
-### ENVIRONMENT variables
-
-If the container is brought up independently of Docker Compose,
-the following vars must be made available:
+When the container is brought up, the following vars can be overridden. Each has a default in the [Dockerfile](./Dockerfile)
+and (f you are using Compose) in the [Docker Compose](./docker-compose.yml) file.
 
 | ENV VAR | Description |
 | ------- | ----------- |
 | LOGLEVEL | A string representation of one of the [Python logging levels](https://docs.python.org/3/library/logging.html#levels) |
+| SERVICE_ADDR | The address to which the http server must bind |
+| SERVICE_PORT | The port to which the http server must bind |

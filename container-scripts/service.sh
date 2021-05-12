@@ -1,2 +1,2 @@
 #!/bin/sh -e
-gunicorn -b 0.0.0.0:$SERVICE_PORT eventhub:app
+gunicorn -b $SERVICE_ADDR:$SERVICE_PORT eventhub:app
