@@ -29,3 +29,15 @@ docker-compose up
 ### Access the API
 
 The API is exposed at http://localhost:5000
+
+
+## Running in production
+
+### ENVIRONMENT variables
+
+If the container is brought up independently of Docker Compose,
+the following vars must be made available:
+
+| ENV VAR | Description |
+| ------- | ----------- |
+| LOGLEVEL | A string representation of one of the [Python logging levels](https://docs.python.org/3/library/logging.html#levels) |

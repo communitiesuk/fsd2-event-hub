@@ -6,6 +6,7 @@ services:
     environment:
       FLASK_APP: eventhub
       FLASK_ENV: development
+      LOGLEVEL: INFO
     ports:
       - "5000:5000"
     volumes:
