@@ -25,12 +25,27 @@ def query_db(query, args=(), one=False):
     return (rv[0] if rv else None) if one else rv
 
 
+def get_abort_response(reason):
+    return Response(f"REJECTED; {reason}", status=400)
+
+
 @app.route("/events/<event_type>", methods=["GET"])
-def list_events(event_type):
-    logger.info(f'list_events called with event_type "{event_type}"')
-    results = query_db(
-        "SELECT seq, data FROM events WHERE type = ? ORDER BY seq", (event_type,)
-    )
+@app.route("/events/<event_type>/since/<seq>", methods=["GET"])
+def list_events(event_type, seq=None):
+    logger.info(f'list_events called with event_type "{event_type}, seq {seq}"')
+    try:
+        since_seq = int(seq or 0)
+    except ValueError:
+        return get_abort_response('"since_seq" must be an integer')
+    if since_seq:
+        results = query_db(
+            "SELECT seq, data FROM events WHERE type = ? AND seq > ? ORDER BY seq",
+            (event_type, since_seq),
+        )
+    else:
+        results = query_db(
+            "SELECT seq, data FROM events WHERE type = ? ORDER BY seq", (event_type,)
+        )
     events = [{"seq": r[0], "data": r[1]} for r in results]
     result = {"events": events}
     if events:
@@ -53,6 +68,6 @@ def append_event(event_type):
             ),
         )
     except sqlite3.OperationalError as sql_err:
-        return Response(f"REJECTED; {sql_err}", status=400)
+        return get_abort_response(sql_err)
 
     return Response(status=201)
