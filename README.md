@@ -28,7 +28,46 @@ docker-compose up
 
 ### Access the API
 
-The API is exposed at http://localhost:5000
+The API is exposed at http://localhost:5000.
+
+Events are appended by POSTing to `/STREAM_NAME` with a JSON string body, e.g.:
+
+```shell script
+curl -H "Content-Type: application/json" -v \
+     -d "{\"id\": \"a1231232\", \"name\": \"Horace\"}" \
+     http://localhost:5000/events/game-characters
+```
+
+Returns a 201 on success; 400 on error.
+
+Events are retrieved by GETting the same URL:
+
+```shell script
+curl http://localhost:5000/events/game-characters
+```
+
+Result:
+```
+{
+  "events": [
+    {
+      "data": "{\"id\":\"bcd52333\",\"name\":\"Puckman\"}",
+      "seq": 1
+    },
+    {
+      "data": "{\"id\":\"a1231232\",\"name\":\"Horace\"}",
+      "seq": 3
+    }
+
+  ],
+  "last_seq_no": 3
+}
+```
+
+NOTES:
+1. `seq` is ordinal but not contiguous (i.e it is shared across event types)
+2. Results are guaranteed to be in order of insert (with `seq` increasing)
+3. `last_seq_no` is only in the payload if there are any events for the named stream
 
 
 ## Running in production
