@@ -10,18 +10,22 @@ Part of the fsd-proto-2 project.
 1. Ensure you have the latest version of [Docker Desktop](https://www.docker.com/products/docker-desktop)
 2. Run `docker-compose build`
 
-## Running the service
+## Running the service in development
 
 ### Build the container image
 
 This is a one-off step (unless you materially change the project).
 
 ```shell script
-docker build -t fsdeventhub .
+docker-compose build
 ```
 
 ### Run the service
 
 ```shell script
-docker run --rm -it -e SERVICE_PORT=8000 fsdeventhub
+docker-compose up
 ```
+
+### Access the API
+
+The API is exposed at http://localhost:5000
