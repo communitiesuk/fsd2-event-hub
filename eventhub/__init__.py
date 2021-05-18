@@ -29,6 +29,14 @@ def get_abort_response(reason):
     return Response(f"REJECTED; {reason}", status=400)
 
 
+# TODO: Fix this so that we pass in the origin of choice from ENVs (and document in README)
+@app.after_request
+def add_cors_header(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
+
+
 @app.route("/events/<event_type>", methods=["GET"])
 @app.route("/events/<event_type>/since/<seq>", methods=["GET"])
 def list_events(event_type, seq=None):
