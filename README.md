@@ -5,6 +5,9 @@ little specialised maintenance / provision knowledge.
 
 Part of the fsd-proto-2 project.
 
+PLEASE NOTE This is a PROTOTYPE and therefore disposable. There are no tests. There are no
+Code Reviews. Just prototype code.
+
 ## Getting set up for development
 
 1. Ensure you have the latest version of [Docker Desktop](https://www.docker.com/products/docker-desktop)
