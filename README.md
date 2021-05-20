@@ -33,14 +33,14 @@ docker-compose up
 
 #### Appending events
 
-The API is exposed at http://localhost:5000.
+The API is exposed at http://localhost:8000.
 
 Events are appended by POSTing to `/STREAM_NAME` with a JSON string body, e.g.:
 
 ```shell script
 curl -H "Content-Type: application/json" -v \
      -d "{\"id\": \"a1231232\", \"name\": \"Horace\"}" \
-     http://localhost:5000/events/game-characters
+     http://localhost:8000/events/game-characters
 ```
 
 Returns a 201 on success; 400 on error.
@@ -50,7 +50,7 @@ Returns a 201 on success; 400 on error.
 Events are retrieved by GETting the same URL:
 
 ```shell script
-curl http://localhost:5000/events/game-characters
+curl http://localhost:8000/events/game-characters
 ```
 
 Result:
@@ -82,7 +82,7 @@ Restrict the number of events returned by providing a `since_seq` value which is
 with a `seq` number greater than that provided. This may of course yield zero events.
 
 ```shell script
-curl http://localhost:5000/events/game-characters/since/2
+curl http://localhost:8000/events/game-characters/since/2
 ```
 
 Result:
