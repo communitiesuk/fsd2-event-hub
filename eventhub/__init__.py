@@ -40,6 +40,15 @@ def add_cors_header(response):
 @app.route("/events/<event_type>", methods=["GET"])
 @app.route("/events/<event_type>/since/<seq>", methods=["GET"])
 def list_events(event_type, seq=None):
+    """
+    List events of the given type.
+
+    Optionally a subset of events can be requested, by use of the
+    `since/<seq>` syntax.
+
+    See README.md for details of the syntax options and the response
+    payload components.
+    """
     logger.info(f'list_events called with event_type "{event_type}, seq {seq}"')
     try:
         since_seq = int(seq or 0)
@@ -63,6 +72,11 @@ def list_events(event_type, seq=None):
 
 @app.route("/events/<event_type>", methods=["POST"])
 def append_event(event_type):
+    """
+    Append an event of the given type.
+
+    See README.md for an example of the call payload.
+    """
     # We don't bother to validate the data as JSON since if it's badly formed,
     # the db will reject it.
     data = request.data
