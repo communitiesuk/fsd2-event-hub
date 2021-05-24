@@ -99,6 +99,19 @@ Result:
 }
 ```
 
+### Removing / Deleting an event type
+
+Clear down all events of a given type:
+
+```shell script
+curl -X DELETE http://localhost:8000/events/EVENTTYPE
+```
+
+Returns 204 regardless of number of records deleted.
+
+This method is to facilitate user-led administration of demonstration environments.
+
+
 ## ENVIRONMENT variables
 
 When the container is brought up, the following vars can be overridden. Each has a default in the [Dockerfile](./Dockerfile)

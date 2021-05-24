@@ -93,3 +93,26 @@ def append_event(event_type):
         return get_abort_response(sql_err)
 
     return Response(status=201)
+
+
+@app.route("/events/<event_type>", methods=["DELETE"])
+def delete_events(event_type):
+    """
+    Delete all events of given type.
+
+    This method is to facilitate user-led administration of demonstration
+    environments.
+
+    Returns 204 regardless of number of records deleted.
+    """
+    data = request.data
+    logger.info(f'append_event called with event_type "{event_type}" and data {data}')
+    try:
+        query_db(
+            "DELETE FROM events WHERE type = ?",
+            (event_type,),
+        )
+    except sqlite3.OperationalError as sql_err:
+        return get_abort_response(sql_err)
+
+    return Response(status=204)
