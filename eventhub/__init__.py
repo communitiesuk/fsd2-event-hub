@@ -34,12 +34,22 @@ def get_abort_response(reason):
 def add_cors_header(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, DELETE"
     return response
 
 
 @app.route("/events/<event_type>", methods=["GET"])
 @app.route("/events/<event_type>/since/<seq>", methods=["GET"])
 def list_events(event_type, seq=None):
+    """
+    List events of the given type.
+
+    Optionally a subset of events can be requested, by use of the
+    `since/<seq>` syntax.
+
+    See README.md for details of the syntax options and the response
+    payload components.
+    """
     logger.info(f'list_events called with event_type "{event_type}, seq {seq}"')
     try:
         since_seq = int(seq or 0)
@@ -63,6 +73,11 @@ def list_events(event_type, seq=None):
 
 @app.route("/events/<event_type>", methods=["POST"])
 def append_event(event_type):
+    """
+    Append an event of the given type.
+
+    See README.md for an example of the call payload.
+    """
     # We don't bother to validate the data as JSON since if it's badly formed,
     # the db will reject it.
     data = request.data
@@ -79,3 +94,26 @@ def append_event(event_type):
         return get_abort_response(sql_err)
 
     return Response(status=201)
+
+
+@app.route("/events/<event_type>", methods=["DELETE"])
+def delete_events(event_type):
+    """
+    Delete all events of given type.
+
+    This method is to facilitate user-led administration of demonstration
+    environments.
+
+    Returns 204 regardless of number of records deleted.
+    """
+    data = request.data
+    logger.info(f'append_event called with event_type "{event_type}" and data {data}')
+    try:
+        query_db(
+            "DELETE FROM events WHERE type = ?",
+            (event_type,),
+        )
+    except sqlite3.OperationalError as sql_err:
+        return get_abort_response(sql_err)
+
+    return Response(status=204)

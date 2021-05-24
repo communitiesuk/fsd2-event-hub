@@ -29,13 +29,13 @@ docker-compose build
 docker-compose up
 ```
 
-### Access the API
+## Access the API
 
-#### Appending events
+### Appending events
 
 The API is exposed at http://localhost:8000.
 
-Events are appended by POSTing to `/STREAM_NAME` with a JSON string body, e.g.:
+Events are appended by POSTing to `/events/STREAM_NAME` with a JSON string body, e.g.:
 
 ```shell script
 curl -H "Content-Type: application/json" -v \
@@ -45,7 +45,7 @@ curl -H "Content-Type: application/json" -v \
 
 Returns a 201 on success; 400 on error.
 
-#### Retrieving all events
+### Retrieving all events
 
 Events are retrieved by GETting the same URL:
 
@@ -76,7 +76,7 @@ NOTES:
 2. Results are guaranteed to be in order of insert (with `seq` increasing)
 3. `last_seq_no` is only in the payload if there are any events for the named stream
 
-#### Retrieving recent events
+### Retrieving recent events
 
 Restrict the number of events returned by providing a `since_seq` value which is guaranteed to return only events
 with a `seq` number greater than that provided. This may of course yield zero events.
@@ -98,6 +98,19 @@ Result:
   "last_seq_no": 3
 }
 ```
+
+### Removing / Deleting an event type
+
+Clear down all events of a given type:
+
+```shell script
+curl -X DELETE http://localhost:8000/events/EVENTTYPE
+```
+
+Returns 204 regardless of number of records deleted.
+
+This method is to facilitate user-led administration of demonstration environments.
+
 
 ## ENVIRONMENT variables
 
